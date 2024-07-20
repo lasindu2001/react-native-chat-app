@@ -3,28 +3,28 @@ import { Slot, useRouter, useSegments } from 'expo-router'
 import { AuthContextProvider, useAuth } from '../context/authContext'
 
 const MainLayout = () => {
-    const {isAuthenticated} = useAuth();
+    const { isAuthenticated } = useAuth();
     const segments = useSegments();
     const router = useRouter();
 
-    useEffect(()=>{
+    useEffect(() => {
         if (typeof isAuthenticated == 'undefined') return
 
-        const inApp = segments[0]=='(app)'
+        const inApp = segments[0] == '(app)'
         if (isAuthenticated && !inApp) {
             router.replace('home');
-        } else if (isAuthenticated==false) {
+        } else if (isAuthenticated == false) {
             router.replace('signIn');
         }
-    },[isAuthenticated])
+    }, [isAuthenticated])
 
-    return <Slot/>
+    return <Slot />
 }
 
 export default function RootLayout() {
     return (
         <AuthContextProvider>
-            <MainLayout/>
+            <MainLayout />
         </AuthContextProvider>
     )
 }
