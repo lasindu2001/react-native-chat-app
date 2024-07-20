@@ -6,6 +6,7 @@ import { Octicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Loading from '../components/Loading';
 import Feather from '@expo/vector-icons/Feather';
+import CustomeKeyboardView from '../components/CustomeKeyboardView';
 
 export default function SignUp() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function SignUp() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <CustomeKeyboardView style={{ flex: 1 }}>
       <StatusBar style='dark' />
       <View style={{
         paddingTop: hp(8),
@@ -174,6 +175,6 @@ export default function SignUp() {
           </View>
         </View>
       </View>
-    </View>
+    </CustomeKeyboardView>
   )
 }
