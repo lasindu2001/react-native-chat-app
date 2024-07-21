@@ -1,7 +1,7 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebaseConfig";
-import { addDoc, doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext();
 
@@ -14,6 +14,7 @@ export const AuthContextProvider = ({ children }) => {
             if (user) {
                 setIsAuthenticated(true)
                 setUser(user)
+                updateUserData(user.uid)
             } else {
                 setIsAuthenticated(false)
                 setUser(null)
@@ -22,11 +23,34 @@ export const AuthContextProvider = ({ children }) => {
         return unsub;
     }, [])
 
+    const updateUserData = async (userId) => {
+        const docRef = doc(db, 'users', userId);
+        const docSnap = await getDoc(docRef)
+
+        if (docSnap.exists()) {
+            let data = docSnap.data();
+            setUser({
+                ...user,
+                username: data.username,
+                profileUrl: data.profileUrl,
+                userId: data.userId,
+            })
+        }
+    }
+
     const login = async (email, password) => {
         try {
-
+            const response = await signInWithEmailAndPassword(auth, email, password)
+            return {success: true}
         } catch (error) {
-
+            let msg = error.message
+            if (msg.includes('(auth/invalid-email)')){
+                msg = 'Invalid email'
+            }
+            if (msg.includes('(auth/invalid-login-credentials)')){
+                msg = 'Wrong credentials'
+            }
+            return { success: false, msg }
         }
     }
 
@@ -55,6 +79,12 @@ export const AuthContextProvider = ({ children }) => {
             let msg = error.message
             if (msg.includes('(auth/invalid-email)')){
                 msg = 'Invalid email'
+            }
+            if (msg.includes('(auth/email-already-in-use)')){
+                msg = 'Email already in use'
+            }
+            if (msg.includes('(auth/weak-password)')){
+                msg = 'Password should be at least 6 characters long'
             }
             return { success: false, msg }
         }
