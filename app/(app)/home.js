@@ -3,18 +3,19 @@ import React from 'react'
 import { useAuth } from '../../context/authContext'
 
 export default function Home() {
-  const { logout, user } = useAuth()
+  const { logout } = useAuth()
 
   const handleLogout = async () => {
     await logout()
   }
 
-  console.log('user data', user)
-
   return (
-    <View>
+    <View style={{
+      flex: 1,
+      backgroundColor: 'white'
+    }}>
       <Text>Home</Text>
-      <Button title='Sign Out' onPress={handleLogout}/>
+      <Button title='Sign Out' onPress={handleLogout} />
     </View>
   )
 }
