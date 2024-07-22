@@ -60,13 +60,24 @@ export default function HomeHeader() {
                             transition={1000}
                         />
                     </MenuTrigger>
-                    <MenuOptions>
+                    <MenuOptions customStyles={{
+                        optionsContainer: {
+                            borderRadius: 10,
+                            borderCurve: 'continuous',
+                            marginTop: 40,
+                            backgroundColor: 'white',
+                            shadowOpacity: 0.2,
+                            shadowOffset: {width: 0, height: 0},
+                            width: 160
+                        }
+                    }}>
                         <MenuItem
                             text="Profile"
                             action={handleProfile}
                             value={null}
                             icon={<Feather name='user' size={hp(2.5)} color='#737373' />}
                         />
+                        <Divider />
                         <MenuItem
                             text="Sign Out"
                             action={handleLogout}
@@ -77,5 +88,15 @@ export default function HomeHeader() {
                 </Menu>
             </View>
         </View>
+    )
+}
+
+const Divider = () => {
+    return (
+        <View style={{
+            padding: 1,
+            width: '100%',
+            backgroundColor: '#E5E7EB',
+        }} />
     )
 }
