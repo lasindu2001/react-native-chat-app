@@ -5,12 +5,26 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Image } from 'expo-image';
 import { blurhash } from '../utils/common';
 import { useAuth } from '../context/authContext';
+import {
+    Menu,
+    MenuOptions,
+    MenuTrigger,
+} from 'react-native-popup-menu';
+import { MenuItem } from './CustomMenuItems';
+import { Feather } from '@expo/vector-icons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ios = Platform.OS == 'ios'
 
 export default function HomeHeader() {
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
     const { top } = useSafeAreaInsets()
+
+    const handleProfile = () => { }
+
+    const handleLogout = async () => {
+        await logout()
+    }
 
     return (
         <View style={{
@@ -33,12 +47,34 @@ export default function HomeHeader() {
                 </Text>
             </View>
             <View>
-                <Image
-                    style={{height: hp(4.3), aspectRatio: 1, borderRadius: 100}}
-                    source={user?.profileUrl}
-                    placeholder={blurhash}
-                    transition={1000}
-                />
+                <Menu>
+                    <MenuTrigger customStyles={{
+                        triggerWrapper: {
+                            // trigger wrapper styles
+                        }
+                    }}>
+                        <Image
+                            style={{ height: hp(4.3), aspectRatio: 1, borderRadius: 100 }}
+                            source={user?.profileUrl}
+                            placeholder={blurhash}
+                            transition={1000}
+                        />
+                    </MenuTrigger>
+                    <MenuOptions>
+                        <MenuItem
+                            text="Profile"
+                            action={handleProfile}
+                            value={null}
+                            icon={<Feather name='user' size={hp(2.5)} color='#737373' />}
+                        />
+                        <MenuItem
+                            text="Sign Out"
+                            action={handleLogout}
+                            value={null}
+                            icon={<AntDesign name="logout" size={hp(2.5)} color='#737373' />}
+                        />
+                    </MenuOptions>
+                </Menu>
             </View>
         </View>
     )
