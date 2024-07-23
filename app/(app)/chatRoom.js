@@ -63,13 +63,13 @@ export default function ChatRoom() {
                 profileUrl: user?.profileUrl,
                 createdAt: Timestamp.fromDate(new Date())
             })
-            console.log('new message id: ', newDoc.id)
+            // console.log('new message id: ', newDoc.id)
         } catch (error) {
             Alert.alert('Message', error.message)
         }
     }
 
-    console.log('messages: ', messages);
+    // console.log('messages: ', messages);
 
     return (
         <CustomeKeyboardView inchat={true}>
@@ -79,7 +79,7 @@ export default function ChatRoom() {
                 <View style={{ height: 12, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' }} />
                 <View style={{ flex: 1, justifyContent: 'space-between', backgroundColor: '#F3F4F6', overflow: 'visible' }}>
                     <View style={{ flex: 1 }}>
-                        <MessagesList messages={messages} />
+                        <MessagesList messages={messages} currentUser={user}/>
                     </View>
                     <View style={{ marginBottom: hp(2.7), paddingTop: 8 }}>
                         <View style={{
