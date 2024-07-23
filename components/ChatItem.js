@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import { Image } from 'expo-image';
-import { blurhash, getRoomId } from '../utils/common';
+import { blurhash, formatDate, getRoomId } from '../utils/common';
 import { collection, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
@@ -46,7 +46,10 @@ export default function ChatItem({ item, index, router, noBorder, currentUser })
     }
 
     const renderTime = () => {
-        return 'Time'
+        if (lastMessage) {
+            let date = lastMessage?.createdAt
+            return formatDate(new Date(date?.seconds * 1000))
+        }
     }
 
     const renderLastMessage = () => {
