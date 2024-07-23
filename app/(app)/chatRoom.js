@@ -1,4 +1,4 @@
-import { Alert, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Keyboard, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar';
@@ -20,6 +20,7 @@ export default function ChatRoom() {
     const [messages, setMessages] = useState([])
     const textRef = useRef('')
     const inputRef = useRef(null)
+    const scrollViewRef = useRef(null)
 
     useEffect(() => {
         createRoomIfNotExists()
@@ -36,7 +37,14 @@ export default function ChatRoom() {
             setMessages([...allMessages])
         })
 
-        return unsub;
+        const KeyBoardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow', updateScrollView
+        )
+
+        return () => {
+            unsub()
+            KeyBoardDidShowListener.remove()
+        }
     }, [])
 
     const createRoomIfNotExists = async () => {
@@ -71,6 +79,16 @@ export default function ChatRoom() {
 
     // console.log('messages: ', messages);
 
+    useEffect(() => {
+        updateScrollView()
+    }, [messages])
+
+    const updateScrollView = () => {
+        setTimeout(() => {
+            scrollViewRef?.current?.scrollToEnd({animated: true})
+        }, 100)
+    }
+
     return (
         <CustomeKeyboardView inchat={true}>
             <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -79,7 +97,7 @@ export default function ChatRoom() {
                 <View style={{ height: 12, borderBottomWidth: 1, borderBottomColor: '#E5E7EB' }} />
                 <View style={{ flex: 1, justifyContent: 'space-between', backgroundColor: '#F3F4F6', overflow: 'visible' }}>
                     <View style={{ flex: 1 }}>
-                        <MessagesList messages={messages} currentUser={user}/>
+                        <MessagesList scrollViewRef={scrollViewRef} messages={messages} currentUser={user}/>
                     </View>
                     <View style={{ marginBottom: hp(2.7), paddingTop: 8 }}>
                         <View style={{
