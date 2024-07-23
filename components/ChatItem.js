@@ -25,7 +25,7 @@ export default function ChatItem({ item, index, router, noBorder, currentUser })
         return unsub;
     }, [])
 
-    console.log('last message', lastMessage)
+    // console.log('last message', lastMessage)
 
     const baseStyle = {
         flexDirection: 'row',
@@ -43,6 +43,20 @@ export default function ChatItem({ item, index, router, noBorder, currentUser })
 
     const openChatRoom = () => {
         router.push({pathname: '/chatRoom', params: item})
+    }
+
+    const renderTime = () => {
+        return 'Time'
+    }
+
+    const renderLastMessage = () => {
+        if (typeof lastMessage === 'undefined') return 'Loading...'
+        if (lastMessage) {
+            if (currentUser?.userId == lastMessage?.userId) return "You: " + lastMessage?.text
+            return lastMessage?.text
+        } else {
+            return 'Say Hi!!!'
+        }
     }
 
     return (
@@ -71,7 +85,7 @@ export default function ChatItem({ item, index, router, noBorder, currentUser })
                         fontWeight: '500',
                         color: '#6B7280'
                     }}>
-                        Time
+                        {renderTime()}
                     </Text>
                 </View>
                 <Text style={{
@@ -79,7 +93,7 @@ export default function ChatItem({ item, index, router, noBorder, currentUser })
                     fontWeight: '500',
                     color: '#6B7280'
                 }}>
-                    Last Message
+                    {renderLastMessage()}
                 </Text>
             </View>
         </TouchableOpacity>
