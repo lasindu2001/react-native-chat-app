@@ -19,8 +19,12 @@ export default function ChatItem({ item, index, router, noBorder }) {
         borderBottomColor: '#E5E7EB'
     };
 
+    const openChatRoom = () => {
+        router.push({pathname: '/chatRoom', params: item})
+    }
+
     return (
-        <TouchableOpacity style={{ ...baseStyle, ...borderStyle }}>
+        <TouchableOpacity onPress={openChatRoom} style={{ ...baseStyle, ...borderStyle }}>
             {/* <Image
                 source={{uri: item?.profileUrl}}
                 style={{ height: hp(6), width: hp(6), borderRadius: 100 }}

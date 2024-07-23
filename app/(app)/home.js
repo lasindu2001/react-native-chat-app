@@ -1,10 +1,11 @@
-import { View, StatusBar, ActivityIndicator } from 'react-native'
+import { View, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import ChatList from '../../components/ChatList'
 import { useAuth } from '../../context/authContext'
 import { getDocs, query, where } from 'firebase/firestore'
 import { usersRef } from '../../firebaseConfig'
+import { StatusBar } from 'expo-status-bar'
 // import Loading from '../../components/Loading'
 
 export default function Home() {
