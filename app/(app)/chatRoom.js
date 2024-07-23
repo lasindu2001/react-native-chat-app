@@ -9,7 +9,7 @@ import { Feather } from '@expo/vector-icons';
 import CustomeKeyboardView from '../../components/CustomeKeyboardView';
 import { useAuth } from '../../context/authContext'
 import { getRoomId } from '../../utils/common';
-import { addDoc, collection, doc, setDoc, Timestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, onSnapshot, orderBy, query, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
 
 export default function ChatRoom() {
@@ -23,6 +23,20 @@ export default function ChatRoom() {
 
     useEffect(() => {
         createRoomIfNotExists()
+
+        let roomId = getRoomId(user?.userId, item?.userId)
+        const docRef = doc(db, 'rooms', roomId)
+        const messagesRef = collection(docRef, 'messages')
+        const q = query(messagesRef, orderBy('createdAt', 'asc'))
+
+        let unsub = onSnapshot(q, (snapshot) => {
+            let allMessages = snapshot.docs.map((doc) => {
+                return doc.data()
+            })
+            setMessages([...allMessages])
+        })
+
+        return unsub;
     }, [])
 
     const createRoomIfNotExists = async () => {
@@ -54,6 +68,8 @@ export default function ChatRoom() {
             Alert.alert('Message', error.message)
         }
     }
+
+    console.log('messages: ', messages);
 
     return (
         <CustomeKeyboardView inchat={true}>
